@@ -60,8 +60,8 @@ GOM_chl_map = ggplot() +
 # bathemetry 
 
 # Gulf of Maine
-lon_bounds = c(-72, -62)
-lat_bounds = c(39, 47)
+lon_bounds = c(-72, -53)
+lat_bounds = c(39, 53)
 
 bath_m_raw = marmap::getNOAA.bathy(lon1 = lon_bounds[1], 
                       lon2 = lon_bounds[2], 
@@ -164,3 +164,17 @@ USA_crit_hab_sf = USA_crit_hab_sf %>%
 
 crit_hab = rbind(USA_crit_hab_sf, CAN_crit_hab_sf)
   
+head(crit_hab)
+
+carcass = read.csv("data/RW_carcasses_2017.csv")
+head(carcass)
+
+world_map = map_data("worldHires", ylim=lat_bounds, xlim=lon_bounds)
+
+crit_map = ggplot() + 
+  geom_polygon(data=world_map, aes(x=long, y=lat, group=group), fill="black") +
+  geom_sf(data=crit_hab, aes(fill=country)) + 
+  geom_point(data=carcass, aes(x=Longitude, y=Latitude, color=Carcass_position)) +
+  coord_sf(1.3, xlim=lon_bounds, ylim=lat_bounds) + 
+  theme_bw()
+
